@@ -391,3 +391,10 @@ title,
 description
 
 vamos criar um arquivo model chamado Pergunta na pasta database e como isso é um model, uma boa prática é utilizar letra maiúscula no começo.
+
+simplesmente seguindo esses passos de criação de model, uma tabela será criada no seu banco.
+
+agora, no workbench, podemos ver nossa tabela. Ela automaticamente cria um id e lá podemos ver também o campo createdAt e updatedAt, mostrando o horário de ATUALIZAÇÃO
+e criação de perguntas.
+
+ele conseguiu converter tudo que eu escrevi em js no banco.
