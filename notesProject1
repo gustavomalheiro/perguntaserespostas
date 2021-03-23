@@ -1,0 +1,323 @@
+PROJETO 1: Perguntas e respostas ao estilo Yahoo.
+
+esse projeto tem o intuito de te aprofundar no express, te ensinar a utilizar o express com mysql e mais importante,
+como utilizar o express, o node, com html e css. além de tudo isso, vamos aprender o básico do bootstrap.
+
+vamos iniciar o projeto node com npm init.
+
+o arquivo package.json foi gerado e ele é como o RG do seu projeto.
+
+agora vamos criar o entry point, que seria como o main file do seu projeto.
+
+no nosso projeto, vamos utilizar 3 tecnologias. o express, o mysql e uma tecnologia para exibir html. 
+além de utilizarmos o mysql com o node, vamos utilizar uma tecnologia que será responsável por permitir que trabalhemos
+com arquivos html no node.
+
+essa tecnologia é o EJS ou Embedded Javascript, que é o que chamamos de template engine, que tem a função de desenhar html
+então podemos mandar o EJS desenhar um HTML em qualquer ponto da nossa aplicação. Ex: se na nossa aplicação tenhamos a rota "/login"
+eu posso mandar o EJS desenhar um html de login nessa rota. ele vai fazer o processo de renderização e exibir ele pra tela.
+então, quando o usuário entrar em uma rota, eu mando o essa rota, através do EJS, desenhar o html correspondente. 
+
+porém, além de ser uma template engine que desenha/renderiza o nosso html, o EJS também consegue nos dar poderes no HTML, nos permitindo
+usar o javascript diretamente no HTML. Incluindo estruturas.
+
+agora veremos como instalar essa tecnologia junto com o express.
+
+express: npm install expres --save
+
+ejs: npm install ejs --save
+
+configurando o EJS com o express:
+
+const express = require("ex");
+const app = express();
+
+a partir dessa variável app eu consigo criar rotas, rodar minha aplicação.
+
+depois de configurar o express, rodar nossa aplicação e ligar o nodemon, você pode acessar o localhost
+
+mas agora, eu quero que minha página exiba HTML e não só um texto. Então, vamos configurar o EJS:
+
+app.set('view engine','ejs');
+
+estou dizendo pro meu express que a view engine que eu quero utilizar é a ejs. ou seja, estou dizendo para o express usar
+o ejs como view engine.
+
+no padrão do node, você deve criar uma pasta chamada views e todos os seus arquivos html devem ser salvos nessa pasta. 
+pois é a pasta que o express lê pra pegar os arquivos html.
+
+só que não estamos utilizando html básico, estamos utilizando html com ejs. então os arquivos que utilizaremos serão os arquivos
+ejs. ex: index.ejs
+
+porém, basicamente só muda a extensão. esses arquivos funcionam como html.
+
+agora que já criamos nosso primeiro html, podemos mandar o express desenhar ele. utilizando: res.render("index")
+
+lembram que renderização significa desenhar algo na tela? então, quando o usuário acessar essa rota "/", a rota vai desenhar algo
+o que nós passamos como parâmetro (index)
+
+você não precisa colocar o diretório completo, pois esse método render já automaticamente olha na pasta view.
+
+podemos ter pasta dentro da pasta view para organizar também. ex: "principal/perfil" desde que tudo esteja na pasta view.
+
+Exibindo Variáveis no EJS:
+
+    nessa aula vamos ver como exibir variáveis no html. Então eu posso criar variáveis dentro do meu backend e passá-las para o meu
+    html de maneira bem simples. É um recurso essencial para qualquer aplicação web.
+
+    é bem simples, você só precisa fazer isso: 
+
+    app.get("/",(req, res) => {
+        let nome = "Gustavo Malheiro";
+        let lang = "Javascript";
+        res.render("index", {
+            nome: nome,
+            lang: lang,
+            empresa: "Guia do Programador",
+            inscritos: 8000
+        });
+    });
+
+    passar como parâmetro também para o método render um objeto com as variáveis que você criou dentro da rota. Como visto
+    no exemplo, você também pode colocar dados diretamente no objeto (sem precisar armazená-los em uma variável).
+
+    como fazer pra receber agora esses valores passados? 
+
+    através dessa tag especial do EJS: <%= %> que significa exibir valor de uma variável
+
+    <%= nome %>
+    <%= lang %>
+    <%= empresa %>
+    <%= inscritos %>
+
+    agora, nós podemos misturar o html com as nossas variáveis recebidas (graças ao EJS), por exemplo: 
+
+    <p>Nome: <%= nome %></p>
+    <p>Linguagem Favorita: <%= lang %></p>
+    <p>Empresa: <%= empresa %> </p>
+    <p>Inscritos: <%= inscritos %> </p>
+
+    isso é o que chamamos de html dinâmico.
+
+    você se lembra dos parâmetros? onde o usuário pode passar informações diferentes pra uma rota? vamos usar isso agora
+    para que o usuário quando for acessar essa rota, passe o nome dele e a linguagem favorita dele nos parâmetros, para
+    que nós consigamos pegar o nome e a linguagem favorita dele e exibir no meu html. 
+
+    app.get("/:nome/:lang",(req, res) => { // estou pegando a informação que o usuário digitar
+        let nome = req.params.nome; // salvando nas minhas variáveis
+        let lang = req.params.lang;
+        res.render("index", {
+            nome: nome, // passando essas duas variáveis que pegamos dos parâmetros para o meu html normal
+            lang: lang,
+            empresa: "Guia do Programador",
+            inscritos: 8040
+        });
+    });
+
+    então além de estar exibindo as variáveis do meu html, eu consigo alterar o valor delas dinâmicamente graças a essa funcionalidade
+    de parâmetros que o express tem.
+
+Estruturas de controle no EJS:
+
+    nessa aula veremos como utilizar condicionais no html (EJS).
+
+    vamos declarar no index uma variável boolean msg como true e mandar dentro do nosso objeto. 
+
+    eu quero exibir msg no meu html apenas caso uma condição for atendida, então utilizaremos a tag <% %>. Sem o =
+    pois só fazemos com quando quisermos pegar o valor de uma variável.
+
+    <% if(msg == true) { %>
+        <h3>Isso é uma msg de erro! </h3>
+    <% } %>
+
+    o mesmo esquema para o else. sempre usando uma chave pra cada parte da estrutura:
+
+    <% if(msg == true) { %>
+        <h3>Isso é uma msg de erro! </h3>
+    <% } else { %>
+        <h3> Nenhum erro! </h3>
+    <% } %>
+    
+    então, com esse recurso eu consigo controlar o que eu exibo na minha página conforme as condições. São recursos poderosos
+    do EJS. Elas servem, por exemplo, para ocultar recursos dependendo das permissões do usuário.
+
+Estruturas de Repetição no EJS:
+
+    a estrutra mais usada no EJS é o For each e precisamos ter dados para isso, como um array de objetos:
+
+     let produtos = [
+        {
+            nome: "Doritos",
+            preco: 3.14
+        },
+        {
+            nome: "Coca-Cola",
+            preco: 5
+        },
+        {
+            nome: "Leite",
+            preco: 1.45
+        }
+    ]
+
+    for each é um método do javascript que significa para cada.
+    então, para cada elemento do array, ele vai fazer algo.
+
+    for each é um método que vem em todo um array, então podemos acessar com .forEach()
+
+    para cada elemento do array, ele vai executar uma função
+
+    <% # o sinal de igual é apenas para exibir variáveis %>
+
+    é possível customizar com tags html o resultado do seu for each
+
+    qualquer h que você coloque já quebra a linha
+
+Arquivos estáticos
+
+    São arquivos que não são processados no seu backend, como por exemplo: o css, arquivos javascript
+    do seu frontend, imagens, arquivos de dados, etc.
+
+    para utilizar arquivos estáticos no express, só precisamos adicionar uma linha:
+
+    app.use(express.static('public')) //dizendo para o express que eu quero utilizar alguma coisa
+    // aqui estamos dizendo que queremos utilizar a pasta public, que é uma pasta onde fica os arquivos
+    estáticos.
+
+    só de fazer isso, sua aplicação já vai aceitar que você carregue os arquivos estáticos
+
+    dentro da pasta public, vamos criar uma pasta chamada css e nessa pasta, vamos criar um arquivo chamado
+    style.css
+
+    vamos definir h1 com a cor azul:
+
+    h1 {
+    color: blue;
+    }
+
+    agora, temos que linkar esse arquivo css com um arquivo ejs e fazemos isso da mesma forma que com html
+
+    como o express automaticamente busca esses arquivos na pasta public, você não precisa dizer que ele esta 
+    nessa pasta no href.
+
+    podemos colocar, da mesma forma, imagens, utilizando a mesma tag para imagens do html: <img src="/img/guia.gif">
+
+    tudo isso só é possível por causa da configuração app.use(express.static('public'))
+
+Bootstrap
+
+    todo o nosso frontend vai ser feito utilizando o bootstrap
+
+    o bootstrap tras muitos componentes legais que deixam nossa interface bem bonita e ainda permite que criemos sites
+    responsivos (que se adaptam em qualquer dispositivo).
+
+    os arquivos do bootstrap (css e js) devem ser salvos na pasta public, pois é lá onde guardamos todo o frontend do nosso
+    projeto.
+
+    vamos apagar o que eu tinha feito como teste, então vou salvar aqui como backup:
+
+    const express = require("express");
+const app = express();
+
+//estou dizendo para o express utilizar o EJS como View Engine
+app.set("view engine","ejs");
+app.use(express.static('public')) //express quer usar alguma coisa
+
+
+// criando rotas
+/* rota padrão */
+app.get("/:nome/:lang/:mensagem",(req, res) => { // estou pegando a informação que o usuário digitar
+    let nome = req.params.nome; // salvando nas minhas variáveis
+    let lang = req.params.lang;
+    let exibirMsg = false;
+
+    let produtos = [
+        {nome: "Doritos", preco: 3.14},
+        {nome: "Coca-Cola", preco: 5},
+        {nome: "Leite", preco: 1.45},
+        {nome: "Carne", preco: 15},
+        {nome: "Redbull", preco: 6},
+        {nome: "Nescau", preco: 4},
+    ]
+
+    res.render("index", { // a resposta do servidor
+        nome: nome, // passando essas duas variáveis que pegamos dos parâmetros para o meu html normal
+        lang: lang,
+        empresa: "Guia do Programador",
+        inscritos: 8040,
+        msg: exibirMsg,
+        produto: produtos
+        
+    });
+});
+
+// rodando a aplicação
+app.listen(8080, () => {
+    console.log("App rodando!");
+});
+
+    o bootstrap é simplesmente composto por arquivos css e arquivos js, significa que se eu quiser utilizar ele no nosso html, basta importar normalmente.
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css"> <- esse é o arquivo css do bootstrap.
+
+    para que o bootstrap funcione corretamente, precisamos importar o jquery e o popper, que são duas dependências dele. Para isso, podemos importá-lo diretamente
+    da internet, com as tags:
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap.min.js"></script> // carregando o script do bootstrap
+
+agora nós vamos começar a criar nossa página de Perguntas
+
+    vamos criar uma rota simples chamada perguntar
+    e vamos renderizar um html nela
+
+    antes de qualquer coisa, vamos deletar a pasta principal, pois não utilizaremos mais ela e também o arquivo home.ejs
+
+
+container: recurso do bootstrap que vai colocar seu conteudo dentro de um bloco dentro do site, centralizando seu conteúdo. tudo que você colocar dentro do container, vai ficar
+centralizado e tudo que você colocar fora vai ficar na borda. Isso para mostrar os diferentes escopos.
+
+text: para colocar o título da pergunta
+textarea: para textos grandes
+label: serve para nomear os campos
+button: é um botão para o seu formulário
+
+form-control: classe do bootstrap que deixa seu formulário no estilo bootstrap
+btn btn-success: classes do bootstrap que também estilizam seu botão 
+além da btn-success, temos também:
+
+btn-primary
+btn-danger
+btn-warning
+
+hr: cria uma linha que separa
+
+agora, vamos utilizar o recurso de card do bootstrap para podermos melhorar a aparência do nosso site.
+
+os cards são divididos entre header e body.
+
+agora, vamos aprender como mudar a cor de fundo 
+
+pra isso, vamos criar uma pasta css e acessar o arquivo style.css
+
+quando você vai trabalhar com o css puro além do boostrap, você deve carregar o arquivo css depois de carregar o boostrap, se não suas alterações não seram validas.
+
+navbar:
+
+<nav class="navbar navbar-light bg-light"> // navbar: define que vai ser navbar ; navbar-light: define a cor dos textos (navbar clara: textos escuros) ; bg-light: cor do background 
+
+navbar-brand = alinha a imagem a esquerda da navbar
+
+bg-primary = muda o fundo da navbar
+
+vh = unidade que corresponde a porcentagem da tela (altura da tela)
+
+AVISO SOBRE A ATUALIZAÇÃO DO EJS E O INCLUDE COM PARTIALS:
+
+antes: <%- include partials/header.ejs %>
+agora: <%- include ('partials/header.ejs'); %>
+
+quero que a navbar fique em todas as páginas do meu site. Para resolver isso o EJS tem um recurso chamado Partials.
+
+agora sempre que precisar inserir esses elementos de uma maneira fácil no meu código html eu vou conseguir, utilizando os Partials.
