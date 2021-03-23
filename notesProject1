@@ -321,3 +321,13 @@ agora: <%- include ('partials/header.ejs'); %>
 quero que a navbar fique em todas as páginas do meu site. Para resolver isso o EJS tem um recurso chamado Partials.
 
 agora sempre que precisar inserir esses elementos de uma maneira fácil no meu código html eu vou conseguir, utilizando os Partials.
+
+ENVIO DE FORUMULÁRIOS PARA O NODE:
+
+para isso, nós precisamos escolher um dos métodos http: get ou post (post é o ideal, pois esconde os dados dentro da requisição).
+
+você utiliza rotas do tipo post geralmente para receber dados de formulário
+
+criei um formulario post que envia os dados pra rota post salvar pergunta.
+
+depois que o formulario estiver enviando para o backend, nós precisamos pegar esses dados (título e descrição)
