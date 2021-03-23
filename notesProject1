@@ -398,3 +398,19 @@ agora, no workbench, podemos ver nossa tabela. Ela automaticamente cria um id e 
 e criação de perguntas.
 
 ele conseguiu converter tudo que eu escrevi em js no banco.
+
+SALVANDO PERGUNTAS NO BANCO:
+
+agora nós queremos mandar as perguntas da rota post perguntas para o banco de dados.
+
+se eu quero salvar algum dado dentro de uma tabela, eu tenho que pegar o model de uma tabela e através desse model eu tenho que chamar o método create.
+
+se ele nos redirecionou para a página principal, é que tudo ocorreu com sucesso.
+
+cada pergunta recebe um id único e data de criação.
+
+LISTAR AS PERGUNTAS NA PÁGINA PRINCIPAL:
+
+nós já estamos salvando as perguntas no banco de dados, agora nós vamos listá-las.
+
+pra eu poder manipular as perguntas, tenho que trabalhar com o model que representa a tabela perguntas (model Pergunta) na minha rota principal.

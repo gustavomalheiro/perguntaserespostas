@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const connection = require("./database/database.js");
-const perguntaModel = require("./database/Perguntas")
+const Pergunta = require("./database/Perguntas")
 
 //Database
 
@@ -28,6 +28,7 @@ app.use(express.json());
 // criando rotas
 /* rota padrão */
 app.get("/", (req, res) => { // estou pegando a informação que o usuário digitar
+    Pergunta.findAll()
     res.render("index");
 });
 
@@ -37,10 +38,19 @@ app.get("/perguntar", (req, res) => {
 });
 
 // rota para receber dados do formulário
-app.post("/salvarpergunta", (req, res) => { // o formulário trabalha com POST, então a rota também deve ser post. 
+app.post("/salvarpergunta", (req, res) => { // o formulário trabalha com POST, então a rota também deve ser post.
+
     let titulo = req.body.titulo; // uma variável para receber o título vindo do body
     let descricao = req.body.descricao; // uma variável para receber a decricao vinda do body
-    res.send("Formulário recebido! Titulo: " + titulo + " " + " Descricao: " + descricao)
+
+    // salvando perguntas que foram enviadas para a rota
+    Pergunta.create({ // método equivalente a um insert no banco
+        titulo: titulo,
+        descricao: descricao
+    }).then(() => { // agora colocaremos o que queremos fazer após a pergunta ser salva no banco
+        res.redirect("/"); // apenas a barra, significando que eu quero redirecionar para minha página principal após fazer a pergunta
+    });
+    
 });
 
 // rodando a aplicação

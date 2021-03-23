@@ -20,3 +20,5 @@ Pergunta.sync({force: false}).then(() => { // o then está servindo apenas para 
     console.log("Tabela criada!")
 }); // vai sincronizar o que está aqui com o que está no bd. Se não existir uma tabela pergunta, ele vai criar.
 // o force significa que ele não vai forçar a criação da tabela caso ela já exista.
+
+module.exports = Pergunta; // preciso exportar o model de perguntas
