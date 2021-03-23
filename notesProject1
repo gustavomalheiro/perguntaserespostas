@@ -331,3 +331,63 @@ você utiliza rotas do tipo post geralmente para receber dados de formulário
 criei um formulario post que envia os dados pra rota post salvar pergunta.
 
 depois que o formulario estiver enviando para o backend, nós precisamos pegar esses dados (título e descrição)
+
+CAPTURANDO DADOS DE UM formulário
+
+aprendemos como enviar dados, mas não como pegar eles.
+
+para isso, utilizaremos uma dependência chamada body-parser, que é o responsável por traduzir os dados enviados pelo formulário em uma estrutura js
+que conseguiremos utilizar no backend.
+
+(o uso do bodyparser foi descontinuado, então usarei apenas express.urlencoded)
+
+certifique-se de que deu um nome aos campos do formulário.
+
+após isso, poderemos utilizar esses nomes aqui no meu backend.
+
+APRESENTANDO O SEQUELIZE:
+
+para se trabalhar com mysql e outros bancos usando o node, o ideal é utilizar o sequelize.
+com ele você consegue fazer qualquer manipulação no seu sql.
+o sequelize faz todo o processo de conexão, manipulação, tudo dentro do node (código javascript).
+
+COM SQL:
+    INSERT INTO usuarios....
+COM SEQUELIZE (JS):
+    Usuario.Criar({
+        nome: "Victor",
+        lang: "Javascript"
+    }).Salvar()
+
+você deve instalar o sequelize e uma biblioteca extra que é o mysql2. Só assim será possível utiliza-lo.
+
+dentro do arquivo database.js, ficará nossa conexão com o sequelize.
+
+no mysql workbench, vamos criar um novo banco de dados.
+
+agora vamos fazer todos os arquivos contendo as conexões com o banco.
+
+no index.js, vamos criar uma função de conexão.
+
+ERRO DE CONEXÃO:
+
+algumas vezes pode acabar acontecendo um erro muito comum.
+
+esse erro acontece pq o mysql é um software que já existe a anos e sempre utilizou o memso protocolo.
+mas agora esse protocolo mudou e ficou mais avançado/robusto.
+
+porém o mysql2 não se atualizou para essa nova autenticação do mysql. (parece que já atualizou agora em 2021)
+
+GERANDO TABELAS COM MODEL:
+
+com o sequelize nós não precisamos utilizar uma linha se quer de sql, incluindo para a geração de tabelas.
+podemos fazer isso com o javascript.
+
+e pra criar nossas tabelas, vamos utilizar um conceito chamado MODEL. É algo que representa a sua tabela, uma estrutura de dados
+que representa sua tabela.
+
+primeiro model que vamos criar é da tabela de perguntas, que terá dois campos: 
+title, 
+description
+
+vamos criar um arquivo model chamado Pergunta na pasta database e como isso é um model, uma boa prática é utilizar letra maiúscula no começo.
