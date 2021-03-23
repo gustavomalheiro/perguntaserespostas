@@ -27,9 +27,18 @@ app.use(express.json());
 
 // criando rotas
 /* rota padrão */
-app.get("/", (req, res) => { // estou pegando a informação que o usuário digitar
-    Pergunta.findAll()
-    res.render("index");
+app.get("/", (req, res) => { // estou pegando a informação que o usuário digitar *
+    Pergunta.findAll({ raw: true}).then(perguntas => { // método do sequelize responsável por procurar todas as perguntas e nos retornar. Ele equivale a um select no banco
+    // raw significa que só queremos os dados e nada mais
+        console.log(perguntas) // se exibido, provará que as perguntas foram recebidas (opcional)
+
+        // colocando o render dentro do then do método findAll, podemos renderizar apenas se os dados estiverem sendo recebidos.
+        res.render("index", {
+            perguntas: perguntas // estou criando uma variável perguntas, que recebe as perguntas do banco de dados, possibilitando que as usemos no nosso frontend na view index.
+        });
+
+    }); // esse then vai fazer com que, caso as perguntas sejam recebidas pelo método findAll, elas sejam colocadas dentro da variável 'perguntas', e desta forma
+    // as receberemos 
 });
 
 // criando a página de cadastro de perguntas

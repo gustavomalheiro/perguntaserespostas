@@ -409,8 +409,17 @@ se ele nos redirecionou para a página principal, é que tudo ocorreu com sucess
 
 cada pergunta recebe um id único e data de criação.
 
-LISTAR AS PERGUNTAS NA PÁGINA PRINCIPAL:
+RECEBER AS PERGUNTAS NA PÁGINA PRINCIPAL:
 
 nós já estamos salvando as perguntas no banco de dados, agora nós vamos listá-las.
 
 pra eu poder manipular as perguntas, tenho que trabalhar com o model que representa a tabela perguntas (model Pergunta) na minha rota principal.
+
+agora que as perguntas estão sendo listas, temos que resolver o problema de que não só as perguntas estão sendo listadas, mas também várias informações que não 
+precisamos. para isso, precisamos passar um json dentro do método findAll chamado raw e colocamo como true, sinalizando que só queremos os dados e nada mais.
+
+agora, nós precisamos enviar esses dados para o nosso frontend, para nossa view index.
+
+LISTANDO PERGUNTAS NO FRONTEND:
+
+agora que nós estamos recebendo as perguntas em formato de array do banco, nós precisamos percorrer o array para podermos listá-lo, vamos usar um foreach
