@@ -422,4 +422,39 @@ agora, nós precisamos enviar esses dados para o nosso frontend, para nossa view
 
 LISTANDO PERGUNTAS NO FRONTEND:
 
-agora que nós estamos recebendo as perguntas em formato de array do banco, nós precisamos percorrer o array para podermos listá-lo, vamos usar um foreach
+agora que nós estamos recebendo as perguntas em formato de array do banco, nós precisamos percorrer o array para podermos listá-lo, vamos usar um foreach.
+
+ORDENAR A BUSCA NO MYSQL:
+
+eu gostaria de exibir a pergunta mais recente para a mais antiga.
+
+a melhor forma de ordenar é pelo id, pois sempre a questão mais recente vai ter o maior id.
+
+caso eu quisesse ordenar pelo título, seria uma ordem alfabética. tem que ser o exato nome do campo no banco.
+
+desc = do z a a BUS
+asc = a a z
+
+BUSCA CONDICIONAL COM O SEQUELIZE:
+
+vamos começar a desenvolver a página de pergunta.
+
+a página de cada pergunta corresponderá a: localhost8080/pergunta/id
+
+caso um id inválido fosse digitado, o usuário seria redirecionado para a página principal
+
+o model representa a tabela no banco de dados, então tudo que for necessário fazer na tabela, eu tenho que chamar o model.
+
+para isso utilizaremos o método findOne, que serve para acharmos UM valor no banco de dados e com o where, podemos especificar as condições
+da busca (titulo = "titulo especifico", id = id especifico)
+
+se a pergunta for encontrada, eu quero exibir uma nova página com a pergunta dentro, então criaremos uma nova view
+
+FRONTEND DA PÁGINA DE PERGUNTA:
+
+vamos pegar as perguntas e colocar para serem renderizadas na view pergunta
+
+PERGUNTAS COM LINKS DINÂMICOS:
+
+- vamos linkar cada página de pergunta ao seu respectivo botão responder
+

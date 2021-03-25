@@ -28,9 +28,12 @@ app.use(express.json());
 // criando rotas
 /* rota padrão */
 app.get("/", (req, res) => { // estou pegando a informação que o usuário digitar *
-    Pergunta.findAll({ raw: true}).then(perguntas => { // método do sequelize responsável por procurar todas as perguntas e nos retornar. Ele equivale a um select no banco
+    Pergunta.findAll({ raw: true, order:[
+        ['id','ASC'] // passando mais esse parâmetro conseguimos organizar os dados de forma decrescente pelo id.
+        // ASC = Crescente DESC = Decrescente
+    ]}).then(perguntas => { // método do sequelize responsável por procurar todas as perguntas e nos retornar. Ele equivale a um select no banco
     // raw significa que só queremos os dados e nada mais
-        console.log(perguntas) // se exibido, provará que as perguntas foram recebidas (opcional)
+        //console.log(perguntas) // se exibido, provará que as perguntas foram recebidas (opcional)
 
         // colocando o render dentro do then do método findAll, podemos renderizar apenas se os dados estiverem sendo recebidos.
         res.render("index", {
@@ -60,6 +63,21 @@ app.post("/salvarpergunta", (req, res) => { // o formulário trabalha com POST, 
         res.redirect("/"); // apenas a barra, significando que eu quero redirecionar para minha página principal após fazer a pergunta
     });
     
+});
+
+app.get("/pergunta/:id", (req, res) => { // parâmetro no express requer : e o nome do parâmetro
+    let id = req.params.id; //pegando o número que o usuário digita 
+    Pergunta.findOne({ // método do sequelize que vai buscar no banco UM dado com uma condição, que é a pergunta que tem o id igual ao parâmetro digitado
+        where: {id: id} // where é utilizado para fazer buscas através de condições (quero uma pergunta que tenha o id igual a minha variável id)
+    }).then(pergunta => { // quando a operação de busca for concluída, ele vai chamar esse then e vai passar a pergunta nessa variável 'pergunta'
+        if(pergunta != undefined){ // se a pergunta for encontrada, será tratada nesse if
+            res.render("pergunta", {
+                pergunta: pergunta
+            }); // exibe a página da pergunta
+        }else{ // não encontrada, será tratada nesse else
+            res.redirect("/"); // se não encontrado, irá para página principal
+        }
+    }) 
 });
 
 // rodando a aplicação
