@@ -68,16 +68,25 @@ app.post("/salvarpergunta", (req, res) => { // o formulário trabalha com POST, 
 app.get("/pergunta/:id", (req, res) => { // parâmetro no express requer : e o nome do parâmetro
     let id = req.params.id; //pegando o número que o usuário digita 
     Pergunta.findOne({ // método do sequelize que vai buscar no banco UM dado com uma condição, que é a pergunta que tem o id igual ao parâmetro digitado
-        where: {id: id} // where é utilizado para fazer buscas através de condições (quero uma pergunta que tenha o id igual a minha variável id)
+        where: {id: id}, // where é utilizado para fazer buscas através de condições (quero uma pergunta que tenha o id igual a minha variável id)
     }).then(pergunta => { // quando a operação de busca for concluída, ele vai chamar esse then e vai passar a pergunta nessa variável 'pergunta'
         if(pergunta != undefined){ // se a pergunta for encontrada, será tratada nesse if
-            res.render("pergunta", {
-                pergunta: pergunta
-            }); // exibe a página da pergunta
+            // caso a pergunta exista, vamos pegar na tabela resposta os resultados onde o perguntaId for igual ao id
+            Resposta.findAll({
+                where: {perguntaId: pergunta.id},
+                order: [ // ordenando as respostas em ordem decrescente (da mais recente pra mais antiga)
+                    ['id', 'DESC']
+                ]
+            }).then(respostas => { // se houver alguma resposta para essa pergunta, vamos passar as respostas para a view
+                res.render("pergunta", {
+                    pergunta: pergunta,
+                    respostas: respostas
+                }); // exibe a página da pergunta
+            });
         }else{ // não encontrada, será tratada nesse else
             res.redirect("/"); // se não encontrado, irá para página principal
         }
-    }) 
+    });
 });
 
 // rota que vai receber a resposta do formulário. tipo post

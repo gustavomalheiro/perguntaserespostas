@@ -486,3 +486,23 @@ RESPONDENDO PERGUNTAS:
 
 Agora nos criamos uma nova rota post para armazenar as respostas no banco de dados, criando (caso não exista) a tabela. Essa rota vai se comunicar com o form
 da view pergunta, que também é do tipo post. De lá ele vai receber os dados corpo e perguntaId, para armazenar no banco.
+
+EXIBIÇÃO DE RESULTADOS E FINALIZAÇÃO:
+
+vamos finalizar o projeto de fato exibindo na página da pergunta todas as respostas que essa pergunta tem.
+
+para isso, vamos utilizar a rota em que renderizamos a página específica de cada pergunta. Assim que verificarmos se a pergunta foi achada ou não, se a resposta for
+positiva, vamos utilizar o findAll com um where recuperando todas as perguntas onde o idPergunta for igual ao id e enviando para a view.
+
+chegando lá, vamos usar um foreach para iterar um vetor de respostas.
+
+agora que estilizamos a exibição das respostas, precisamos ordená-las como fizemos com as perguntas na home page.
+
+pronto, nosso site de perguntas e respostas está prontinho e funcionando.
+
+O próximo projeto contemplará muitas coisas novas, como:
+
+- sistema de login;
+- trabalhar com relacionamentos;
+- como criar um CRUD completo (Create, Read, Update and Delete);
+-
