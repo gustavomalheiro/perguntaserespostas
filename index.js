@@ -80,6 +80,19 @@ app.get("/pergunta/:id", (req, res) => { // parâmetro no express requer : e o n
     }) 
 });
 
+// rota que vai receber a resposta do formulário. tipo post
+app.post("/responder", (req, res) => {
+    let corpo = req.body.corpo; // pegando o que está no campo corpo lá do form de reposta
+    let perguntaId = req.body.pergunta; // pegando o id que está no campo escondido lá do form
+    // quero criar uma nova resposta, então vou usar o model resposta
+    Resposta.create({
+        corpo: corpo, // armazenando o que está na variável corpo dentro do campo corpo
+        perguntaId: perguntaId // mesma coisa com o campo id 
+    }).then(() => {
+        res.redirect("/pergunta/"+perguntaId); 
+    });
+});
+
 // rodando a aplicação
 app.listen(8080, () => {
     console.log("App rodando!");

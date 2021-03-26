@@ -1,0 +1,488 @@
+PROJETO 1: Perguntas e respostas ao estilo Yahoo.
+
+esse projeto tem o intuito de te aprofundar no express, te ensinar a utilizar o express com mysql e mais importante,
+como utilizar o express, o node, com html e css. além de tudo isso, vamos aprender o básico do bootstrap.
+
+vamos iniciar o projeto node com npm init.
+
+o arquivo package.json foi gerado e ele é como o RG do seu projeto.
+
+agora vamos criar o entry point, que seria como o main file do seu projeto.
+
+no nosso projeto, vamos utilizar 3 tecnologias. o express, o mysql e uma tecnologia para exibir html. 
+além de utilizarmos o mysql com o node, vamos utilizar uma tecnologia que será responsável por permitir que trabalhemos
+com arquivos html no node.
+
+essa tecnologia é o EJS ou Embedded Javascript, que é o que chamamos de template engine, que tem a função de desenhar html
+então podemos mandar o EJS desenhar um HTML em qualquer ponto da nossa aplicação. Ex: se na nossa aplicação tenhamos a rota "/login"
+eu posso mandar o EJS desenhar um html de login nessa rota. ele vai fazer o processo de renderização e exibir ele pra tela.
+então, quando o usuário entrar em uma rota, eu mando o essa rota, através do EJS, desenhar o html correspondente. 
+
+porém, além de ser uma template engine que desenha/renderiza o nosso html, o EJS também consegue nos dar poderes no HTML, nos permitindo
+usar o javascript diretamente no HTML. Incluindo estruturas.
+
+agora veremos como instalar essa tecnologia junto com o express.
+
+express: npm install expres --save
+
+ejs: npm install ejs --save
+
+configurando o EJS com o express:
+
+const express = require("ex");
+const app = express();
+
+a partir dessa variável app eu consigo criar rotas, rodar minha aplicação.
+
+depois de configurar o express, rodar nossa aplicação e ligar o nodemon, você pode acessar o localhost
+
+mas agora, eu quero que minha página exiba HTML e não só um texto. Então, vamos configurar o EJS:
+
+app.set('view engine','ejs');
+
+estou dizendo pro meu express que a view engine que eu quero utilizar é a ejs. ou seja, estou dizendo para o express usar
+o ejs como view engine.
+
+no padrão do node, você deve criar uma pasta chamada views e todos os seus arquivos html devem ser salvos nessa pasta. 
+pois é a pasta que o express lê pra pegar os arquivos html.
+
+só que não estamos utilizando html básico, estamos utilizando html com ejs. então os arquivos que utilizaremos serão os arquivos
+ejs. ex: index.ejs
+
+porém, basicamente só muda a extensão. esses arquivos funcionam como html.
+
+agora que já criamos nosso primeiro html, podemos mandar o express desenhar ele. utilizando: res.render("index")
+
+lembram que renderização significa desenhar algo na tela? então, quando o usuário acessar essa rota "/", a rota vai desenhar algo
+o que nós passamos como parâmetro (index)
+
+você não precisa colocar o diretório completo, pois esse método render já automaticamente olha na pasta view.
+
+podemos ter pasta dentro da pasta view para organizar também. ex: "principal/perfil" desde que tudo esteja na pasta view.
+
+Exibindo Variáveis no EJS:
+
+    nessa aula vamos ver como exibir variáveis no html. Então eu posso criar variáveis dentro do meu backend e passá-las para o meu
+    html de maneira bem simples. É um recurso essencial para qualquer aplicação web.
+
+    é bem simples, você só precisa fazer isso: 
+
+    app.get("/",(req, res) => {
+        let nome = "Gustavo Malheiro";
+        let lang = "Javascript";
+        res.render("index", {
+            nome: nome,
+            lang: lang,
+            empresa: "Guia do Programador",
+            inscritos: 8000
+        });
+    });
+
+    passar como parâmetro também para o método render um objeto com as variáveis que você criou dentro da rota. Como visto
+    no exemplo, você também pode colocar dados diretamente no objeto (sem precisar armazená-los em uma variável).
+
+    como fazer pra receber agora esses valores passados? 
+
+    através dessa tag especial do EJS: <%= %> que significa exibir valor de uma variável
+
+    <%= nome %>
+    <%= lang %>
+    <%= empresa %>
+    <%= inscritos %>
+
+    agora, nós podemos misturar o html com as nossas variáveis recebidas (graças ao EJS), por exemplo: 
+
+    <p>Nome: <%= nome %></p>
+    <p>Linguagem Favorita: <%= lang %></p>
+    <p>Empresa: <%= empresa %> </p>
+    <p>Inscritos: <%= inscritos %> </p>
+
+    isso é o que chamamos de html dinâmico.
+
+    você se lembra dos parâmetros? onde o usuário pode passar informações diferentes pra uma rota? vamos usar isso agora
+    para que o usuário quando for acessar essa rota, passe o nome dele e a linguagem favorita dele nos parâmetros, para
+    que nós consigamos pegar o nome e a linguagem favorita dele e exibir no meu html. 
+
+    app.get("/:nome/:lang",(req, res) => { // estou pegando a informação que o usuário digitar
+        let nome = req.params.nome; // salvando nas minhas variáveis
+        let lang = req.params.lang;
+        res.render("index", {
+            nome: nome, // passando essas duas variáveis que pegamos dos parâmetros para o meu html normal
+            lang: lang,
+            empresa: "Guia do Programador",
+            inscritos: 8040
+        });
+    });
+
+    então além de estar exibindo as variáveis do meu html, eu consigo alterar o valor delas dinâmicamente graças a essa funcionalidade
+    de parâmetros que o express tem.
+
+Estruturas de controle no EJS:
+
+    nessa aula veremos como utilizar condicionais no html (EJS).
+
+    vamos declarar no index uma variável boolean msg como true e mandar dentro do nosso objeto. 
+
+    eu quero exibir msg no meu html apenas caso uma condição for atendida, então utilizaremos a tag <% %>. Sem o =
+    pois só fazemos com quando quisermos pegar o valor de uma variável.
+
+    <% if(msg == true) { %>
+        <h3>Isso é uma msg de erro! </h3>
+    <% } %>
+
+    o mesmo esquema para o else. sempre usando uma chave pra cada parte da estrutura:
+
+    <% if(msg == true) { %>
+        <h3>Isso é uma msg de erro! </h3>
+    <% } else { %>
+        <h3> Nenhum erro! </h3>
+    <% } %>
+    
+    então, com esse recurso eu consigo controlar o que eu exibo na minha página conforme as condições. São recursos poderosos
+    do EJS. Elas servem, por exemplo, para ocultar recursos dependendo das permissões do usuário.
+
+Estruturas de Repetição no EJS:
+
+    a estrutra mais usada no EJS é o For each e precisamos ter dados para isso, como um array de objetos:
+
+     let produtos = [
+        {
+            nome: "Doritos",
+            preco: 3.14
+        },
+        {
+            nome: "Coca-Cola",
+            preco: 5
+        },
+        {
+            nome: "Leite",
+            preco: 1.45
+        }
+    ]
+
+    for each é um método do javascript que significa para cada.
+    então, para cada elemento do array, ele vai fazer algo.
+
+    for each é um método que vem em todo um array, então podemos acessar com .forEach()
+
+    para cada elemento do array, ele vai executar uma função
+
+    <% # o sinal de igual é apenas para exibir variáveis %>
+
+    é possível customizar com tags html o resultado do seu for each
+
+    qualquer h que você coloque já quebra a linha
+
+Arquivos estáticos
+
+    São arquivos que não são processados no seu backend, como por exemplo: o css, arquivos javascript
+    do seu frontend, imagens, arquivos de dados, etc.
+
+    para utilizar arquivos estáticos no express, só precisamos adicionar uma linha:
+
+    app.use(express.static('public')) //dizendo para o express que eu quero utilizar alguma coisa
+    // aqui estamos dizendo que queremos utilizar a pasta public, que é uma pasta onde fica os arquivos
+    estáticos.
+
+    só de fazer isso, sua aplicação já vai aceitar que você carregue os arquivos estáticos
+
+    dentro da pasta public, vamos criar uma pasta chamada css e nessa pasta, vamos criar um arquivo chamado
+    style.css
+
+    vamos definir h1 com a cor azul:
+
+    h1 {
+    color: blue;
+    }
+
+    agora, temos que linkar esse arquivo css com um arquivo ejs e fazemos isso da mesma forma que com html
+
+    como o express automaticamente busca esses arquivos na pasta public, você não precisa dizer que ele esta 
+    nessa pasta no href.
+
+    podemos colocar, da mesma forma, imagens, utilizando a mesma tag para imagens do html: <img src="/img/guia.gif">
+
+    tudo isso só é possível por causa da configuração app.use(express.static('public'))
+
+Bootstrap
+
+    todo o nosso frontend vai ser feito utilizando o bootstrap
+
+    o bootstrap tras muitos componentes legais que deixam nossa interface bem bonita e ainda permite que criemos sites
+    responsivos (que se adaptam em qualquer dispositivo).
+
+    os arquivos do bootstrap (css e js) devem ser salvos na pasta public, pois é lá onde guardamos todo o frontend do nosso
+    projeto.
+
+    vamos apagar o que eu tinha feito como teste, então vou salvar aqui como backup:
+
+    const express = require("express");
+const app = express();
+
+//estou dizendo para o express utilizar o EJS como View Engine
+app.set("view engine","ejs");
+app.use(express.static('public')) //express quer usar alguma coisa
+
+
+// criando rotas
+/* rota padrão */
+app.get("/:nome/:lang/:mensagem",(req, res) => { // estou pegando a informação que o usuário digitar
+    let nome = req.params.nome; // salvando nas minhas variáveis
+    let lang = req.params.lang;
+    let exibirMsg = false;
+
+    let produtos = [
+        {nome: "Doritos", preco: 3.14},
+        {nome: "Coca-Cola", preco: 5},
+        {nome: "Leite", preco: 1.45},
+        {nome: "Carne", preco: 15},
+        {nome: "Redbull", preco: 6},
+        {nome: "Nescau", preco: 4},
+    ]
+
+    res.render("index", { // a resposta do servidor
+        nome: nome, // passando essas duas variáveis que pegamos dos parâmetros para o meu html normal
+        lang: lang,
+        empresa: "Guia do Programador",
+        inscritos: 8040,
+        msg: exibirMsg,
+        produto: produtos
+        
+    });
+});
+
+// rodando a aplicação
+app.listen(8080, () => {
+    console.log("App rodando!");
+});
+
+    o bootstrap é simplesmente composto por arquivos css e arquivos js, significa que se eu quiser utilizar ele no nosso html, basta importar normalmente.
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css"> <- esse é o arquivo css do bootstrap.
+
+    para que o bootstrap funcione corretamente, precisamos importar o jquery e o popper, que são duas dependências dele. Para isso, podemos importá-lo diretamente
+    da internet, com as tags:
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap.min.js"></script> // carregando o script do bootstrap
+
+agora nós vamos começar a criar nossa página de Perguntas
+
+    vamos criar uma rota simples chamada perguntar
+    e vamos renderizar um html nela
+
+    antes de qualquer coisa, vamos deletar a pasta principal, pois não utilizaremos mais ela e também o arquivo home.ejs
+
+
+container: recurso do bootstrap que vai colocar seu conteudo dentro de um bloco dentro do site, centralizando seu conteúdo. tudo que você colocar dentro do container, vai ficar
+centralizado e tudo que você colocar fora vai ficar na borda. Isso para mostrar os diferentes escopos.
+
+text: para colocar o título da pergunta
+textarea: para textos grandes
+label: serve para nomear os campos
+button: é um botão para o seu formulário
+
+form-control: classe do bootstrap que deixa seu formulário no estilo bootstrap
+btn btn-success: classes do bootstrap que também estilizam seu botão 
+além da btn-success, temos também:
+
+btn-primary
+btn-danger
+btn-warning
+
+hr: cria uma linha que separa
+
+agora, vamos utilizar o recurso de card do bootstrap para podermos melhorar a aparência do nosso site.
+
+os cards são divididos entre header e body.
+
+agora, vamos aprender como mudar a cor de fundo 
+
+pra isso, vamos criar uma pasta css e acessar o arquivo style.css
+
+quando você vai trabalhar com o css puro além do boostrap, você deve carregar o arquivo css depois de carregar o boostrap, se não suas alterações não seram validas.
+
+navbar:
+
+<nav class="navbar navbar-light bg-light"> // navbar: define que vai ser navbar ; navbar-light: define a cor dos textos (navbar clara: textos escuros) ; bg-light: cor do background 
+
+navbar-brand = alinha a imagem a esquerda da navbar
+
+bg-primary = muda o fundo da navbar
+
+vh = unidade que corresponde a porcentagem da tela (altura da tela)
+
+AVISO SOBRE A ATUALIZAÇÃO DO EJS E O INCLUDE COM PARTIALS:
+
+antes: <%- include partials/header.ejs %>
+agora: <%- include ('partials/header.ejs'); %>
+
+quero que a navbar fique em todas as páginas do meu site. Para resolver isso o EJS tem um recurso chamado Partials.
+
+agora sempre que precisar inserir esses elementos de uma maneira fácil no meu código html eu vou conseguir, utilizando os Partials.
+
+ENVIO DE FORUMULÁRIOS PARA O NODE:
+
+para isso, nós precisamos escolher um dos métodos http: get ou post (post é o ideal, pois esconde os dados dentro da requisição).
+
+você utiliza rotas do tipo post geralmente para receber dados de formulário
+
+criei um formulario post que envia os dados pra rota post salvar pergunta.
+
+depois que o formulario estiver enviando para o backend, nós precisamos pegar esses dados (título e descrição)
+
+CAPTURANDO DADOS DE UM formulário
+
+aprendemos como enviar dados, mas não como pegar eles.
+
+para isso, utilizaremos uma dependência chamada body-parser, que é o responsável por traduzir os dados enviados pelo formulário em uma estrutura js
+que conseguiremos utilizar no backend.
+
+(o uso do bodyparser foi descontinuado, então usarei apenas express.urlencoded)
+
+certifique-se de que deu um nome aos campos do formulário.
+
+após isso, poderemos utilizar esses nomes aqui no meu backend.
+
+APRESENTANDO O SEQUELIZE:
+
+para se trabalhar com mysql e outros bancos usando o node, o ideal é utilizar o sequelize.
+com ele você consegue fazer qualquer manipulação no seu sql.
+o sequelize faz todo o processo de conexão, manipulação, tudo dentro do node (código javascript).
+
+COM SQL:
+    INSERT INTO usuarios....
+COM SEQUELIZE (JS):
+    Usuario.Criar({
+        nome: "Victor",
+        lang: "Javascript"
+    }).Salvar()
+
+você deve instalar o sequelize e uma biblioteca extra que é o mysql2. Só assim será possível utiliza-lo.
+
+dentro do arquivo database.js, ficará nossa conexão com o sequelize.
+
+no mysql workbench, vamos criar um novo banco de dados.
+
+agora vamos fazer todos os arquivos contendo as conexões com o banco.
+
+no index.js, vamos criar uma função de conexão.
+
+ERRO DE CONEXÃO:
+
+algumas vezes pode acabar acontecendo um erro muito comum.
+
+esse erro acontece pq o mysql é um software que já existe a anos e sempre utilizou o memso protocolo.
+mas agora esse protocolo mudou e ficou mais avançado/robusto.
+
+porém o mysql2 não se atualizou para essa nova autenticação do mysql. (parece que já atualizou agora em 2021)
+
+GERANDO TABELAS COM MODEL:
+
+com o sequelize nós não precisamos utilizar uma linha se quer de sql, incluindo para a geração de tabelas.
+podemos fazer isso com o javascript.
+
+e pra criar nossas tabelas, vamos utilizar um conceito chamado MODEL. É algo que representa a sua tabela, uma estrutura de dados
+que representa sua tabela.
+
+primeiro model que vamos criar é da tabela de perguntas, que terá dois campos: 
+title, 
+description
+
+vamos criar um arquivo model chamado Pergunta na pasta database e como isso é um model, uma boa prática é utilizar letra maiúscula no começo.
+
+simplesmente seguindo esses passos de criação de model, uma tabela será criada no seu banco.
+
+agora, no workbench, podemos ver nossa tabela. Ela automaticamente cria um id e lá podemos ver também o campo createdAt e updatedAt, mostrando o horário de ATUALIZAÇÃO
+e criação de perguntas.
+
+ele conseguiu converter tudo que eu escrevi em js no banco.
+
+SALVANDO PERGUNTAS NO BANCO:
+
+agora nós queremos mandar as perguntas da rota post perguntas para o banco de dados.
+
+se eu quero salvar algum dado dentro de uma tabela, eu tenho que pegar o model de uma tabela e através desse model eu tenho que chamar o método create.
+
+se ele nos redirecionou para a página principal, é que tudo ocorreu com sucesso.
+
+cada pergunta recebe um id único e data de criação.
+
+RECEBER AS PERGUNTAS NA PÁGINA PRINCIPAL:
+
+nós já estamos salvando as perguntas no banco de dados, agora nós vamos listá-las.
+
+pra eu poder manipular as perguntas, tenho que trabalhar com o model que representa a tabela perguntas (model Pergunta) na minha rota principal.
+
+agora que as perguntas estão sendo listas, temos que resolver o problema de que não só as perguntas estão sendo listadas, mas também várias informações que não 
+precisamos. para isso, precisamos passar um json dentro do método findAll chamado raw e colocamo como true, sinalizando que só queremos os dados e nada mais.
+
+agora, nós precisamos enviar esses dados para o nosso frontend, para nossa view index.
+
+LISTANDO PERGUNTAS NO FRONTEND:
+
+agora que nós estamos recebendo as perguntas em formato de array do banco, nós precisamos percorrer o array para podermos listá-lo, vamos usar um foreach.
+
+ORDENAR A BUSCA NO MYSQL:
+
+eu gostaria de exibir a pergunta mais recente para a mais antiga.
+
+a melhor forma de ordenar é pelo id, pois sempre a questão mais recente vai ter o maior id.
+
+caso eu quisesse ordenar pelo título, seria uma ordem alfabética. tem que ser o exato nome do campo no banco.
+
+desc = do z a a BUS
+asc = a a z
+
+BUSCA CONDICIONAL COM O SEQUELIZE:
+
+vamos começar a desenvolver a página de pergunta.
+
+a página de cada pergunta corresponderá a: localhost8080/pergunta/id
+
+caso um id inválido fosse digitado, o usuário seria redirecionado para a página principal
+
+o model representa a tabela no banco de dados, então tudo que for necessário fazer na tabela, eu tenho que chamar o model.
+
+para isso utilizaremos o método findOne, que serve para acharmos UM valor no banco de dados e com o where, podemos especificar as condições
+da busca (titulo = "titulo especifico", id = id especifico)
+
+se a pergunta for encontrada, eu quero exibir uma nova página com a pergunta dentro, então criaremos uma nova view
+
+FRONTEND DA PÁGINA DE PERGUNTA:
+
+vamos pegar as perguntas e colocar para serem renderizadas na view pergunta
+
+PERGUNTAS COM LINKS DINÂMICOS:
+
+- vamos linkar cada página de pergunta ao seu respectivo botão responder
+
+quando o loop rodar, ele vai pegar o id das perguntas que usaremos no link para a página de cada uma
+
+MODEL DE RESPOSTA:
+
+vamos começar a parte de respostas do nosso sistema. Mais especificamente, o model da resposta.
+
+toda resposta vai responder uma pergunta, então precisamos saber de alguma forma pra qual pergunta será a respsota. (ID)
+
+relacionamento cru = não é a melhor forma de fazer um relacionamento, mas é a mais simples.
+
+FORMULÁRIO DE RESPOSTA:
+
+apenas criamos mais um form na view pergunta.ejs
+
+CAMPO DE FORMULÁRIO COM VALOR DINÂMICO:
+
+Quando esse formulário for enviado, nós precisamos saber de alguma forma qual pergunta está sendo respondida.
+
+para isso, vamos criar um campo que vai armazenar qual o id que vc está respondendo
+
+classe value = sempre vai ter o valor que vc colocar la
+
+vamos deixar o campo que armazena o id com o tipo hidden, que deixa ele escondido.
+
+RESPONDENDO PERGUNTAS:
+
+Agora nos criamos uma nova rota post para armazenar as respostas no banco de dados, criando (caso não exista) a tabela. Essa rota vai se comunicar com o form
+da view pergunta, que também é do tipo post. De lá ele vai receber os dados corpo e perguntaId, para armazenar no banco.
