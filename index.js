@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const connection = require("./database/database.js");
 const Pergunta = require("./database/Perguntas")
+const Resposta = require("./database/Respostas")
 
 //Database
-
 connection
     .authenticate() // vai tentar logar no mysql
     .then(() => {
@@ -29,7 +29,7 @@ app.use(express.json());
 /* rota padrão */
 app.get("/", (req, res) => { // estou pegando a informação que o usuário digitar *
     Pergunta.findAll({ raw: true, order:[
-        ['id','ASC'] // passando mais esse parâmetro conseguimos organizar os dados de forma decrescente pelo id.
+        ['id','DESC'] // passando mais esse parâmetro conseguimos organizar os dados de forma decrescente pelo id.
         // ASC = Crescente DESC = Decrescente
     ]}).then(perguntas => { // método do sequelize responsável por procurar todas as perguntas e nos retornar. Ele equivale a um select no banco
     // raw significa que só queremos os dados e nada mais

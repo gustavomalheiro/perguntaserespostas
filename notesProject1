@@ -458,3 +458,12 @@ PERGUNTAS COM LINKS DINÂMICOS:
 
 - vamos linkar cada página de pergunta ao seu respectivo botão responder
 
+quando o loop rodar, ele vai pegar o id das perguntas que usaremos no link para a página de cada uma
+
+MODEL DE RESPOSTA:
+
+vamos começar a parte de respostas do nosso sistema. Mais especificamente, o model da resposta.
+
+toda resposta vai responder uma pergunta, então precisamos saber de alguma forma pra qual pergunta será a respsota. (ID)
+
+relacionamento cru = não é a melhor forma de fazer um relacionamento, mas é a mais simples.
